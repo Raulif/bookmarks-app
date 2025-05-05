@@ -46,4 +46,18 @@ export const APIRoute = createAPIFileRoute("/api/bookmarks")({
       return json({ error: error.message }, { status: 500 });
     }
   },
+
+  OPTIONS: async ({ request, params }) => {
+    return json(
+      {},
+      {
+        status: 200,
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type",
+        },
+      }
+    );
+  },
 });
