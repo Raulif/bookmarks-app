@@ -5,7 +5,17 @@ export const APIRoute = createAPIFileRoute("/api/bookmarks")({
   POST: async ({ request, params }) => {
     try {
       const bookmarks = await request.json();
-      return json({ message: "test" }, { status: 200 });
+      return json(
+        { message: "test" },
+        {
+          status: 200,
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "POST, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type",
+          },
+        }
+      );
       // const response = await fetch(`${BASE_CONVEX_URL}/bookmarks`, {
       //   method: "POST",
       //   headers: {
