@@ -21,10 +21,6 @@ export const APIRoute = createAPIFileRoute("/api/bookmarks")({
         { message: "Bookmarks added successfully" },
         {
           status: 200,
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-          },
         }
       );
     } catch (error) {
