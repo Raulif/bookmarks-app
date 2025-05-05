@@ -3,7 +3,7 @@ import { createAPIFileRoute } from "@tanstack/react-start/api";
 import { BASE_CONVEX_URL } from "../../constants";
 export const APIRoute = createAPIFileRoute("/api/bookmarks")({
   POST: async ({ request, params }) => {
-    try {      
+    try {
       const bookmarks = await request.json();
       const response = await fetch(`${BASE_CONVEX_URL}/bookmarks`, {
         method: "POST",
@@ -17,7 +17,16 @@ export const APIRoute = createAPIFileRoute("/api/bookmarks")({
         throw new Error("Failed to add bookmarks");
       }
 
-      return json({ message: "Bookmarks added successfully" }, { status: 200 });
+      return json(
+        { message: "Bookmarks added successfully" },
+        {
+          status: 200,
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+          },
+        }
+      );
     } catch (error) {
       return json({ error: error.message }, { status: 500 });
     }
