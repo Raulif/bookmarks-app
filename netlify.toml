@@ -1,0 +1,15 @@
+# Configure headers for all API routes
+[[headers]]
+  for = "/api/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Methods = "GET, POST, OPTIONS, PUT, DELETE"
+    Access-Control-Allow-Headers = "Content-Type, Authorization"
+
+# Redirects for handling OPTIONS preflight requests
+[[redirects]]
+  from = "/api/*"
+  to = "/api/:splat"
+  status = 200
+  force = true
+  conditions = {Method = ["OPTIONS"]}
