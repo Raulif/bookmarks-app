@@ -17,14 +17,12 @@ function Home() {
   const { mutate, isPending } = useMutation({
     mutationFn: useConvexMutation(api.bookmarks.post),
   });
-  
-  const { data: bookmarks } = useSuspenseQuery({
-    queryKey: ['bookmarks'], queryFn: async () => {
-      const response = await fetch('/api/bookmarks')
-      return response.json()
-    }
-  });
-console.log(bookmarks)
+
+  const { data: bookmarks } = useSuspenseQuery(
+    convexQuery(api.bookmarks.get, {})
+  );
+  console.log(bookmarks);
+
   const onClick = () => {
     mutate({ bookmarks: "test" });
   };
