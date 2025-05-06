@@ -9,3 +9,6 @@ export const postBookmarksToDB = async (bookmarks: any) =>
 
 export const getBookmarksFromDB = async () =>
   await convex.query(api.bookmarks.get, {});
+
+export const updateBookmarkInDB = async (id, bookmarks) => 
+  await convex.mutation(api.bookmarks.put, { id, bookmarks });

@@ -4,6 +4,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { api } from "../../convex/_generated/api";
 import { testData } from "../../test";
 import { useCallback, useMemo } from "react";
+import { ListItem } from "../components/ListItemtem";
 
 export const Route = createFileRoute("/")({
   component: Home,
@@ -11,41 +12,23 @@ export const Route = createFileRoute("/")({
 
 function Home() {
   const { data } = useSuspenseQuery(convexQuery(api.bookmarks.get, {}));
-  console.log(data);
-  const onClick = async () => {
-    try {
-      const res = await fetch("api/bookmarks", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(testData),
-      });
-      console.log(res);
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
 
   const bookmarks = useMemo(
     () =>
-      data.length
-        ? data[0].bookmarks.sort((a, b) => a.dateAdded - b.dateAdded)
+      data?.bookmarks?.length
+        ? data.bookmarks.sort((a, b) => a.dateAdded - b.dateAdded)
         : [],
-    []
+    [data]
   );
 
   const formatDate = (date: number) =>
     new Date(date).toLocaleString("de", {
       year: "numeric",
       month: "2-digit",
-      day: "numeric",
+      day: "2-digit",
     });
 
-  const onCheckboxChange = useCallback((event) => {
-    const input = event.target as HTMLInputElement;
-    const { checked } = input;
-    const id = input.dataset.id;
+  const onCheckboxChange = useCallback((id: string, checked: boolean) => {
     fetch("api/bookmarks", {
       method: "PUT",
       headers: {
@@ -56,43 +39,25 @@ function Home() {
   }, []);
 
   return (
-    <div className="px-10 py-4">
-      <h1 className="text-5xl mb-12">Bookmarked Articles</h1>
-      <ul className="flex flex-col gap-2">
+    <div className="outer-container">
+      <h1 className="headline lora-bold">
+        {bookmarks.length ? "Bookmarked Articles" : "No bookmarked articles"}
+      </h1>
+      <div className="lora-bold read">Read</div>
+      <ul className="list">
         {bookmarks?.map((bookmark: any, index) => (
-          <li
+          <ListItem
             key={bookmark.bookmarkId}
-            className="flex justify-between items-start"
-          >
-            <div className="flex gap-1 flex-col">
-              <p className="text-sm">{formatDate(bookmark.dateAdded)}</p>
-              <div className="flex gap-2">
-                <span>{index + 1}</span>
-                <a
-                  href={bookmark.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="underline hover:text-blue-600"
-                >
-                  {bookmark.title}
-                </a>
-              </div>
-            </div>
-            <input
-              data-id={bookmark.bookmarkId}
-              type="checkbox"
-              checked={bookmark.consumed}
-              onChange={onCheckboxChange}
-            />
-          </li>
+            bookmarkId={bookmark.bookmarkId}
+            onCheckboxChange={onCheckboxChange}
+            number={index + 1}
+            date={formatDate(bookmark.dateAdded)}
+            consumed={bookmark.consumed}
+            url={bookmark.url}
+            title={bookmark.title}
+          />
         ))}
       </ul>
-      <button
-        className="bg-blue-500 text-white px-4 py-2 rounded mt-4"
-        onClick={onClick}
-      >
-        Add Bookmarks
-      </button>
     </div>
   );
 }

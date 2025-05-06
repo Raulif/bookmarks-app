@@ -1,1 +1,177 @@
-@import "tailwindcss";
+/* FONTS */
+
+.lora-regular {
+  font-family: "Lora", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.lora-bold {
+  font-family: "Lora", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.lora-regular-italic {
+  font-family: "Lora", sans-serif;
+  font-weight: 400;
+  font-style: italic;
+}
+
+/* STYLES */
+
+.outer-container {
+  padding: 16px 40px;
+  max-width: 1000px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.read {
+  margin-left: auto;
+  margin-bottom: 20px;
+}
+
+.headline {
+  font-size: 3rem;
+  margin-bottom: 42px;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 0;
+  margin: 0;
+}
+
+.list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding-bottom: 24px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  gap: 24px;
+}
+
+.list-item.consumed {
+  opacity: 0.3;
+}
+
+.list-item .item-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.list-item .date-added {
+  font-size: 14px;
+  margin: 0 0 6px;
+}
+
+.list-item .item-inner-content {
+  font-size: 18px;
+}
+
+.list-item .item-number {
+  font-size: 16px;
+}
+
+.list-item a {
+  text-decoration: none;
+  color: black;
+  margin-left: 8px;
+  line-height: 1.5;
+}
+
+.list-item a:hover {
+  text-decoration: underline;
+  text-decoration-color: blueviolet;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}
+
+
+/* CHECKBOX STYLES */
+
+:root {
+  --form-control-color: blueviolet;
+  --form-control-disabled: #959495;
+  --form-control-size: 26px;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
+
+
+.checkbox-container {
+  font-family: system-ui, sans-serif;
+  font-size: var(--form-control-size);
+  font-weight: bold;
+  line-height: 1;
+  display: grid;
+  grid-template-columns: 1em auto;
+}
+
+.checkbox-container + .checkbox-container {
+  margin-top: 1em;
+}
+
+
+input[type="checkbox"] {
+  /* Add if not using autoprefixer */
+  -webkit-appearance: none;
+  /* Remove most all native input styles */
+  appearance: none;
+  /* For iOS < 15 */
+  background-color: var(--form-background);
+  /* Not removed via appearance */
+  margin: 0;
+
+  font: inherit;
+  color: currentColor;
+  width: var(--form-control-size);
+  height: var(--form-control-size);
+  border: 2px solid currentColor;
+  border-radius: 0.15em;
+  transform: translateY(-0.075em);
+  display: grid;
+  place-content: center;
+  cursor: pointer;
+}
+
+input[type="checkbox"]::before {
+  content: "";
+  width: round(up, calc(var(--form-control-size) * 0.69), 1px);
+  height: round(up, calc(var(--form-control-size) * 0.69), 1px);
+  transform: scale(0);
+  transition: 120ms transform ease-in-out;
+  box-shadow: inset 1em 1em var(--form-control-color);
+  /* Windows High Contrast Mode */
+  background-color: CanvasText;
+}
+
+input[type="checkbox"]:checked::before {
+  transform: scale(1);
+}
+
+input[type="checkbox"]:focus {
+  outline: max(2px, 0.15em) solid currentColor;
+  outline-offset: max(2px, 0.15em);
+}
+
+input[type="checkbox"]:disabled {
+  --form-control-color: var(--form-control-disabled);
+
+  color: var(--form-control-disabled);
+  cursor: not-allowed;
+}
+
+input[type="checkbox"]:hover {
+  border-color: var(--form-control-color);
+  box-shadow: 1px 1px 0 var(--form-control-color);
+}

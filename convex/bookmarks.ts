@@ -1,14 +1,36 @@
+import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 
+const Bookmark = v.object({
+  bookmarkId: v.string(),
+  title: v.string(),
+  url: v.string(),
+  dateAdded: v.number(),
+  consumed: v.boolean(),
+  createdAt: v.number(),
+});
 export const post = mutation({
   handler: async (ctx, args) => {
-    return await ctx.db.insert("bookmarks", {bookmarks: args.bookmarks});
+    return await ctx.db.insert("bookmarks", { bookmarks: args.bookmarks });
   },
 });
 
 export const get = query({
   args: {},
   handler: async (ctx) => {
-    return await ctx.db.query("bookmarks").collect();
+    const response = await ctx.db.query("bookmarks").collect();
+    console.log("BOOKMARK", response);
+    return response[0]
+  },
+});
+
+export const put = mutation({
+  args: {
+    id: v.id("bookmarks"),
+    bookmarks: v.array(Bookmark),
+  },
+  handler: async (ctx, args) => {
+    const { id, bookmarks } = args;
+    return await ctx.db.patch(id, { bookmarks });
   },
 });
