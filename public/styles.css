@@ -55,13 +55,15 @@
   gap: 24px;
 }
 
-.list-item.consumed {
+.list-item.consumed .item-content,
+.list-item.consumed .checkbox-container {
   opacity: 0.3;
 }
 
 .list-item .item-content {
   display: flex;
   flex-direction: column;
+  transition: opacity 0.2s ease-in-out;
 }
 
 .list-item .date-added {
@@ -91,7 +93,6 @@
   text-underline-offset: 4px;
 }
 
-
 /* CHECKBOX STYLES */
 
 :root {
@@ -106,8 +107,6 @@
   box-sizing: border-box;
 }
 
-
-
 .checkbox-container {
   font-family: system-ui, sans-serif;
   font-size: var(--form-control-size);
@@ -115,12 +114,12 @@
   line-height: 1;
   display: grid;
   grid-template-columns: 1em auto;
+  transition: opacity 0.2s ease-in-out;
 }
 
 .checkbox-container + .checkbox-container {
   margin-top: 1em;
 }
-
 
 input[type="checkbox"] {
   /* Add if not using autoprefixer */
