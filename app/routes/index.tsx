@@ -5,7 +5,6 @@ import { api } from "../../convex/_generated/api";
 
 import { useCallback, useMemo } from "react";
 import { ListItem } from "../components/ListItemtem";
-import '../styles.css';
 
 export const Route = createFileRoute("/")({
   component: Home,
