@@ -11,14 +11,15 @@ http.route({
 
 http.route({
   path: '/bookmarks',
-  method: 'POST',
-  handler: addBookmarks,
+  method: 'OPTIONS',
+  handler: options
 })
 
 http.route({
   path: '/bookmarks',
-  method: 'OPTIONS',
-  handler: options
+  method: 'POST',
+  handler: addBookmarks,
 })
+
 
 export default http;
