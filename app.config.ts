@@ -6,10 +6,16 @@ export default defineConfig({
     appDirectory: "app",
   },
   vite: {
+    css: {
+      modules: {
+        generateScopedName: "[name]__[local]___[hash:base64:5]",
+      },
+    },
+
     plugins: [
       tsConfigPaths({
         projects: ["./tsconfig.json"],
-      })
+      }),
     ],
   },
 });

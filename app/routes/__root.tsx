@@ -44,7 +44,7 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
         <link
           rel="preconnect"
           href="https://fonts.gstatic.com"
-          crossorigin
+          crossOrigin
         ></link>
         <link
           href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap"
