@@ -67,7 +67,6 @@ export const APIRoute = createAPIFileRoute("/api/bookmarks")({
 
       const updatedBookmarks = bookmarks.map((b) => {
         if (b.bookmarkId === bookmark.id) {
-          console.log("found bookmark", b);
           return { ...b, consumed: bookmark.consumed };
         }
         return b;

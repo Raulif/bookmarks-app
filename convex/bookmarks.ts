@@ -19,7 +19,6 @@ export const get = query({
   args: {},
   handler: async (ctx) => {
     const response = await ctx.db.query("bookmarks").collect();
-    console.log("BOOKMARK", response);
     return response[0]
   },
 });
