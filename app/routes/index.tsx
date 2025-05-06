@@ -3,8 +3,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { api } from "../../convex/_generated/api";
 import { testData } from "../../test";
-import "../styles.css";
-import { use, useCallback, useMemo } from "react";
+import { useCallback, useMemo } from "react";
 
 export const Route = createFileRoute("/")({
   component: Home,
@@ -12,7 +11,7 @@ export const Route = createFileRoute("/")({
 
 function Home() {
   const { data } = useSuspenseQuery(convexQuery(api.bookmarks.get, {}));
-  console.log(data)
+  console.log(data);
   const onClick = async () => {
     try {
       const res = await fetch("api/bookmarks", {
@@ -91,7 +90,9 @@ function Home() {
       <button
         className="bg-blue-500 text-white px-4 py-2 rounded mt-4"
         onClick={onClick}
-      >Add Bookmarks</button>
+      >
+        Add Bookmarks
+      </button>
     </div>
   );
 }
