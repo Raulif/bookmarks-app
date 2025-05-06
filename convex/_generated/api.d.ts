@@ -16,7 +16,6 @@ import type {
 import type * as bookmarks from "../bookmarks.js";
 import type * as http from "../http.js";
 import type * as httpActions from "../httpActions.js";
-import type * as tasks from "../tasks.js";
 
 /**
  * A utility for referencing Convex functions in your app's API.
@@ -30,7 +29,6 @@ declare const fullApi: ApiFromModules<{
   bookmarks: typeof bookmarks;
   http: typeof http;
   httpActions: typeof httpActions;
-  tasks: typeof tasks;
 }>;
 export declare const api: FilterApi<
   typeof fullApi,

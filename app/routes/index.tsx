@@ -7,7 +7,8 @@ import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
 import { api } from "../../convex/_generated/api";
-import { use } from "react";
+import { testData } from "../../test";
+import { BASE_CONVEX_URL } from "../constants";
 
 export const Route = createFileRoute("/")({
   component: Home,
@@ -22,9 +23,20 @@ function Home() {
     convexQuery(api.bookmarks.get, {})
   );
   console.log(bookmarks);
-
-  const onClick = () => {
-    mutate({ bookmarks: "test" });
+  console.log(BASE_CONVEX_URL)
+  const onClick = async () => {
+    try {
+      const res = await fetch(`${BASE_CONVEX_URL}/bookmarks`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(testData),
+      });
+      console.log(res);
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
   return (

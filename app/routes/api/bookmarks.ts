@@ -5,18 +5,13 @@ export const APIRoute = createAPIFileRoute("/api/bookmarks")({
   POST: async ({ request, params }) => {
     try {
       const bookmarks = await request.json();
-
-      const response = await fetch(`${BASE_CONVEX_URL}/bookmarks`, {
+      await fetch(`${BASE_CONVEX_URL}/bookmarks`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(bookmarks),
       });
-
-      if (!response.ok) {
-        throw new Error("Failed to add bookmarks");
-      }
 
       return json(
         { message: "Bookmarks added successfully" },
@@ -30,6 +25,7 @@ export const APIRoute = createAPIFileRoute("/api/bookmarks")({
         }
       );
     } catch (error) {
+      console.log(error);
       return json({ error: error.message }, { status: 500 });
     }
   },
