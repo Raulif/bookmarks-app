@@ -1,18 +1,15 @@
 import { json } from "@tanstack/react-start";
 import { createAPIFileRoute } from "@tanstack/react-start/api";
-import { BASE_CONVEX_URL } from "../../constants";
+import { ConvexHttpClient } from "convex/browser";
+import { api } from "../../../convex/_generated/api";
+import { postBookmarksToDB, getBookmarksFromDB } from "../../db/bookmarks";
+
+
 export const APIRoute = createAPIFileRoute("/api/bookmarks")({
   POST: async ({ request, params }) => {
     try {
       const bookmarks = await request.json();
-      await fetch(`${BASE_CONVEX_URL}/bookmarks`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(bookmarks),
-      });
-
+      await postBookmarksToDB(bookmarks);
       return json(
         { message: "Bookmarks added successfully" },
         {
@@ -32,13 +29,7 @@ export const APIRoute = createAPIFileRoute("/api/bookmarks")({
 
   GET: async ({ request, params }) => {
     try {
-      const response = await fetch(`${BASE_CONVEX_URL}/bookmarks`);
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch bookmarks");
-      }
-
-      const bookmarks = await response.json();
+      const bookmarks = await getBookmarksFromDB();
       return json(bookmarks, { status: 200 });
     } catch (error) {
       return json({ error: error.message }, { status: 500 });
