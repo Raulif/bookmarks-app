@@ -29,17 +29,19 @@ function Home() {
     }
   };
 
+  const bookmarks = data.length ? data[0].bookmarks : [];
+
   return (
     <div>
       <h1>Bookmarks</h1>
       <button onClick={onClick}>Add Bookmarks</button>
       <ul>
-        {data?.bookmarks?.map((bookmark: any) => (
+        {bookmarks?.map((bookmark: any) => (
           <li key={bookmark.id}>
             <a href={bookmark.url} target="_blank" rel="noopener noreferrer">
               {bookmark.title}
             </a>
-            <p>{bookmark.description}</p>
+            <p>{bookmark.description}<p>
             <p>{bookmark.createdAt}</p>
           </li>
         ))}

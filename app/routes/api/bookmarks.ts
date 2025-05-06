@@ -3,13 +3,27 @@ import { createAPIFileRoute } from "@tanstack/react-start/api";
 import { ConvexHttpClient } from "convex/browser";
 import { api } from "../../../convex/_generated/api";
 import { postBookmarksToDB, getBookmarksFromDB } from "../../db/bookmarks";
+import { c } from "vinxi/dist/types/lib/logger";
 
 
 export const APIRoute = createAPIFileRoute("/api/bookmarks")({
   POST: async ({ request, params }) => {
     try {
-      const bookmarks = await request.json();
-      await postBookmarksToDB(bookmarks);
+      const existingBookmarks = await getBookmarksFromDB();
+      const reqBookmarks = await request.json();
+      const bookmarks = reqBookmarks.map((bookmark: any) => {
+        const existing = existingBookmarks.find(b => b.id === bookmark.id);
+        if (existing) {
+          return existing
+        } else {
+          return {
+            ...bookmark,
+            createdAt: new Date().toISOString(),
+            consumed: false,
+          }
+        }
+      })
+      await postBookmarksToDB({...existingBookmarks, ...bookmarks});
       return json(
         { message: "Bookmarks added successfully" },
         {
