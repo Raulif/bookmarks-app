@@ -2,9 +2,10 @@ import { convexQuery } from "@convex-dev/react-query";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { api } from "../../convex/_generated/api";
-import { testData } from "../../test";
+
 import { useCallback, useMemo } from "react";
 import { ListItem } from "../components/ListItemtem";
+import '../styles.css';
 
 export const Route = createFileRoute("/")({
   component: Home,
