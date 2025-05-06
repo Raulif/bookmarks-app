@@ -43,6 +43,7 @@ function Home() {
       <h1 className="headline lora-bold">
         {bookmarks.length ? "Bookmarked Articles" : "No bookmarked articles"}
       </h1>
+      <p className="counter lora-regular-italic">[{bookmarks.length} articles]</p>
       <div className="lora-bold read">Read</div>
       <ul className="list">
         {bookmarks?.map((bookmark: any, index) => (

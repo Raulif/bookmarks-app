@@ -18,6 +18,10 @@
   font-style: italic;
 }
 
+body {
+  margin: 0;
+}
+
 /* STYLES */
 
 .outer-container {
@@ -28,6 +32,12 @@
   flex-direction: column;
 }
 
+@media screen and (max-width: 768px) {
+  .outer-container {
+    padding: 16px;
+  }
+}
+
 .read {
   margin-left: auto;
   margin-bottom: 20px;
@@ -35,7 +45,26 @@
 
 .headline {
   font-size: 3rem;
-  margin-bottom: 42px;
+  margin: 0 0 16px;
+}
+
+@media screen and (max-width: 768px) {
+  .headline {
+    font-size: 2.5rem;
+    margin-bottom: 8px;
+  }
+}
+
+.counter {
+  font-size: 16px;
+  margin: 0px 0px 38px;
+}
+
+@media screen and (max-width: 768px) {
+  .counter {
+    font-size: 14px;
+    margin: 0px 0px 12px;
+  }
 }
 
 .list {
@@ -55,6 +84,12 @@
   gap: 24px;
 }
 
+@media screen and (max-width: 768px) {
+  .list-item {
+    gap: 16px;
+  }
+}
+
 .list-item.consumed .item-content,
 .list-item.consumed .checkbox-container {
   opacity: 0.3;
@@ -71,12 +106,30 @@
   margin: 0 0 6px;
 }
 
+@media screen and (max-width: 768px) {
+  .list-item .date-added {
+    font-size: 12px;
+  }
+}
+
 .list-item .item-inner-content {
   font-size: 18px;
 }
 
+@media screen and (max-width: 768px) {
+  .list-item .item-inner-content {
+    font-size: 16px;
+  }
+}
+
 .list-item .item-number {
   font-size: 16px;
+}
+
+@media screen and (max-width: 768px) {
+  .list-item .item-number {
+    font-size: 14px;
+  }
 }
 
 .list-item a {
@@ -99,6 +152,12 @@
   --form-control-color: blueviolet;
   --form-control-disabled: #959495;
   --form-control-size: 26px;
+}
+
+@media screen and (max-width: 768px) {
+  :root {
+    --form-control-size: 20px;
+  }
 }
 
 *,
