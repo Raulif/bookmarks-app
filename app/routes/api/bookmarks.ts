@@ -1,9 +1,7 @@
 import { json } from "@tanstack/react-start";
 import { createAPIFileRoute } from "@tanstack/react-start/api";
-import { ConvexHttpClient } from "convex/browser";
-import { api } from "../../../convex/_generated/api";
 import { postBookmarksToDB, getBookmarksFromDB } from "../../db/bookmarks";
-import { c } from "vinxi/dist/types/lib/logger";
+import { setHeaders, setResponseStatus } from "@tanstack/react-start/server";
 
 export const APIRoute = createAPIFileRoute("/api/bookmarks")({
   POST: async ({ request, params }) => {
@@ -18,26 +16,23 @@ export const APIRoute = createAPIFileRoute("/api/bookmarks")({
         } else {
           return {
             ...bookmark,
-            createdAt: new Date().toISOString(),
+            createdAt: new Date().getTime(),
             consumed: false,
           };
         }
       });
-      await postBookmarksToDB({ ...existingBookmarks, ...bookmarks });
-      return json(
-        { message: "Bookmarks added successfully" },
-        {
-          status: 200,
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "POST, OPTIONS",
-            "Access-Control-Allow-Headers": "Content-Type",
-          },
-        }
-      );
+
+      await postBookmarksToDB(Array.from([...existingBookmarks, ...bookmarks]));
+      setHeaders({
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "POST, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type",
+      });
+      setResponseStatus(200);
+      return json("Bookmarks added successfully");
     } catch (error) {
       console.log(error);
-      return json({ error: error.message }, { status: 500 });
+      return json({ error: error.message, status: 500 });
     }
   },
 
@@ -45,25 +40,21 @@ export const APIRoute = createAPIFileRoute("/api/bookmarks")({
     try {
       const response = await getBookmarksFromDB();
       const bookmarks = response.length ? response[0].bookmarks : [];
-
+      setResponseStatus(200);
       return json(bookmarks, { status: 200 });
     } catch (error) {
-      return json({ error: error.message }, { status: 500 });
+      return json({ error: error.message, status: 500 });
     }
   },
 
   OPTIONS: async ({ request, params }) => {
-    return json(
-      {},
-      {
-        status: 200,
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-          "Access-Control-Allow-Headers": "Content-Type",
-        },
-      }
-    );
+    setResponseStatus(200);
+    setHeaders({
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type",
+    });
+    return json(null);
   },
 
   PUT: async ({ request, params }) => {
@@ -80,17 +71,13 @@ export const APIRoute = createAPIFileRoute("/api/bookmarks")({
         return b;
       });
       await postBookmarksToDB(updatedBookmarks);
-      return json(
-        { message: "Bookmark updated successfully" },
-        {
-          status: 200,
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-            "Access-Control-Allow-Headers": "Content-Type",
-          },
-        }
-      );
+      setHeaders({
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type",
+      });
+      setResponseStatus(200);
+      return json("Bookmark updated successfully");
     } catch (error) {
       return json({ error: error.message }, { status: 500 });
     }

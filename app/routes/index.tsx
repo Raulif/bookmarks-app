@@ -12,7 +12,7 @@ export const Route = createFileRoute("/")({
 
 function Home() {
   const { data } = useSuspenseQuery(convexQuery(api.bookmarks.get, {}));
-
+  console.log(data)
   const onClick = async () => {
     try {
       const res = await fetch("api/bookmarks", {
@@ -55,17 +55,10 @@ function Home() {
       body: JSON.stringify({ id, consumed: checked }),
     });
   }, []);
-  console.log("bookmarks", bookmarks);
+
   return (
     <div className="px-10 py-4">
-      <div className="flex justify-between w-full mb-12 items-center">
-        <h1 className="text-5xl">Bookmarks</h1>
-        {!bookmarks.length && (
-          <button className="border broder-1 py-1 px-2" onClick={onClick}>
-            Add Bookmarks
-          </button>
-        )}
-      </div>
+      <h1 className="text-5xl mb-12">Bookmarked Articles</h1>
       <ul className="flex flex-col gap-2">
         {bookmarks?.map((bookmark: any, index) => (
           <li
@@ -95,6 +88,10 @@ function Home() {
           </li>
         ))}
       </ul>
+      <button
+        className="bg-blue-500 text-white px-4 py-2 rounded mt-4"
+        onClick={onClick}
+      >Add Bookmarks</button>
     </div>
   );
 }
