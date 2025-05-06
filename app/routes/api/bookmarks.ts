@@ -6,23 +6,29 @@ import { setHeaders, setResponseStatus } from "@tanstack/react-start/server";
 export const APIRoute = createAPIFileRoute("/api/bookmarks")({
   POST: async ({ request, params }) => {
     try {
+      const newBookmarks = await request.json();
+      
       const response = await getBookmarksFromDB();
-      const existingBookmarks = response.bookmarks ?? [];
-      const reqBookmarks = await request.json();
-      const bookmarks = reqBookmarks.map((bookmark: any) => {
-        const existing = existingBookmarks.find((b) => b.id === bookmark.id);
-        if (existing) {
-          return existing;
-        } else {
-          return {
-            ...bookmark,
-            createdAt: new Date().getTime(),
-            consumed: false,
-          };
-        }
-      });
+      const { bookmarks: existingBookmarks, _id } = response;
 
-      await postBookmarksToDB(Array.from([...existingBookmarks, ...bookmarks]));
+      if (_id) {
+        const bookmarks = newBookmarks.map((bookmark: any) => {
+          const existing = existingBookmarks.find((b) => b.id === bookmark.id);
+          if (existing) {
+            return existing;
+          } else {
+            return {
+              ...bookmark,
+              createdAt: new Date().getTime(),
+              consumed: false,
+            };
+          }
+        });
+        await updateBookmarkInDB(_id, Array.from([...existingBookmarks, ...bookmarks]));
+      } else {
+        await postBookmarksToDB(newBookmarks);
+      }
+
       setHeaders({
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Methods": "POST, OPTIONS",
