@@ -8,6 +8,7 @@ export const ListItem = ({
   consumed,
   url,
   title,
+  onHearClick,
 }) => {
   const [isChecked, setIsChecked] = useState(consumed);
 
@@ -30,6 +31,11 @@ export const ListItem = ({
           >
             {title}
           </a>
+        </div>
+        <div className="actions">
+          <button onClick={() => onHearClick(bookmarkId)}>Hear</button>
+          <a href={url} target="_blank"
+            rel="noopener noreferrer" >Visit</a>
         </div>
       </div>
       <div className="checkbox-container">
