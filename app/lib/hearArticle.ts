@@ -1,10 +1,10 @@
 import { speakText } from "./speakText";
 export const hearArticle = async (url: string) => {
   try {
-    // const urlParams = new URLSearchParams({url})
-    // const response = await fetch(`/api/gemini?${urlParams.toString()}`);
-    // const text = await response.json();
-    const text = "";
+    const urlParams = new URLSearchParams({url})
+    const response = await fetch(`/api/gemini?${urlParams.toString()}`);
+    const text = await response.json();
+    // const text = "";
     if (typeof text === "string") {
       await speakText(text);
     } else {
