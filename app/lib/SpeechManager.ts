@@ -4,6 +4,7 @@
 interface SpeechManagerOptions {
   chunkSize?: number;
   lang?: string;
+  pitch?: number;
 }
 
 interface ProgressInfo {
@@ -39,6 +40,7 @@ export class SpeechManager {
     this.options = {
       chunkSize: options.chunkSize ?? 1500,
       lang: options.lang ?? "en-US",
+      pitch: 0.85,
     };
 
     this.synth = window.speechSynthesis;
@@ -114,7 +116,7 @@ export class SpeechManager {
     const utterance = new SpeechSynthesisUtterance(text);
 
     utterance.lang = this.options.lang;
-
+    utterance.pitch = this.options.pitch;
     // Handle chunk completion
     utterance.onend = () => this._handleChunkEnd();
     utterance.onerror = (e: SpeechSynthesisErrorEvent) => {
