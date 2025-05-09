@@ -2,7 +2,7 @@ import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 
 const Bookmark = v.object({
-  bookmarkId: v.string(),
+  id: v.string(),
   title: v.string(),
   url: v.string(),
   dateAdded: v.number(),

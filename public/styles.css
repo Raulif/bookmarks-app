@@ -233,3 +233,7 @@ input[type="checkbox"]:hover {
   border-color: var(--form-control-color);
   box-shadow: 1px 1px 0 var(--form-control-color);
 }
+
+#sort-items-select {
+  margin-left: 16px;
+}

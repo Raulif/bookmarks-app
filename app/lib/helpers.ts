@@ -13,3 +13,5 @@ export const formatDate = (date: number) =>
     if (isGithubRepo) return false
     return true
   }
+
+  export const sortByConsumed = (a, b) => a.consumed - b.consumed
