@@ -1,21 +1,31 @@
 import { json } from "@tanstack/react-start";
 import { createAPIFileRoute } from "@tanstack/react-start/api";
-import { postBookmarksToDB, getBookmarksFromDB, updateBookmarkInDB } from "../../db/bookmarks";
+import {
+  postBookmarksToDB,
+  getBookmarksFromDB,
+  updateBookmarkInDB,
+} from "../../db/bookmarks";
 import { setHeaders, setResponseStatus } from "@tanstack/react-start/server";
+import type { Bookmark } from "../../types/bookmark";
 
 export const APIRoute = createAPIFileRoute("/api/bookmarks")({
   POST: async ({ request, params }) => {
     try {
-      const newBookmarks = await request.json();
-      
-      const response = await getBookmarksFromDB();
-      const { bookmarks: existingBookmarks, _id } = response;
+      const newBookmarks: Bookmark[] = await request.json();
 
+      const response = await getBookmarksFromDB();
+      const _id = response?._id;
+      
       if (_id) {
-        const bookmarks = newBookmarks.map((bookmark: any) => {
-          const existing = existingBookmarks.find((b) => b.id === bookmark.id);
+        const bookmarksInDB: Bookmark[] = response.bookmarks;
+        const bookmarks = newBookmarks.map((bookmark: Bookmark) => {
+          const existing = bookmarksInDB.find((b) => b.id === bookmark.id);
           if (existing) {
-            return existing;
+            return {
+              ...bookmark,
+              createdAt: existing.createdAt,
+              consumed: existing.consumed,
+            };
           } else {
             return {
               ...bookmark,
@@ -24,9 +34,14 @@ export const APIRoute = createAPIFileRoute("/api/bookmarks")({
             };
           }
         });
-        await updateBookmarkInDB(_id, Array.from([...existingBookmarks, ...bookmarks]));
+        await updateBookmarkInDB(_id, Array.from(bookmarks));
       } else {
-        await postBookmarksToDB(newBookmarks);
+        const bookmarks = newBookmarks.map((b) => ({
+          ...b,
+          createdAt: new Date().getTime(),
+          consumed: false,
+        }));
+        await postBookmarksToDB(bookmarks);
       }
 
       setHeaders({
@@ -35,7 +50,7 @@ export const APIRoute = createAPIFileRoute("/api/bookmarks")({
         "Access-Control-Allow-Headers": "Content-Type",
       });
       setResponseStatus(200);
-      return json({ ok: true, message: "Bookmarks added" });
+      return json({ ok: true, message: "Bookmarks added", status: 200 });
     } catch (error) {
       console.log(error);
       setResponseStatus(500);
@@ -45,12 +60,12 @@ export const APIRoute = createAPIFileRoute("/api/bookmarks")({
 
   GET: async ({ request, params }) => {
     try {
-      const {bookmarks} = await getBookmarksFromDB();
+      const { bookmarks } = await getBookmarksFromDB();
       setResponseStatus(200);
       return json(bookmarks);
     } catch (error) {
       setResponseStatus(500);
-      return json({ error: error.message });
+      return json({ error: error.message, status: 500 });
     }
   },
 
@@ -69,7 +84,7 @@ export const APIRoute = createAPIFileRoute("/api/bookmarks")({
       const bookmark = await request.json();
       const response = await getBookmarksFromDB();
 
-      const {bookmarks, _id} = response;
+      const { bookmarks, _id } = response;
 
       const updatedBookmarks = bookmarks.map((b) => {
         if (b.bookmarkId === bookmark.id) {
@@ -84,9 +99,10 @@ export const APIRoute = createAPIFileRoute("/api/bookmarks")({
         "Access-Control-Allow-Headers": "Content-Type",
       });
       setResponseStatus(200);
-      return json({ ok: true, message: "Bookmark updated" });
+      return json({ ok: true, message: "Bookmark updated", status: 200 });
     } catch (error) {
-      return json({ error: error.message }, { status: 500 });
+      setResponseStatus(500);
+      return json({ error: error.message, status: 500 });
     }
   },
 });
