@@ -6,3 +6,10 @@ export const formatDate = (date: number) =>
     month: "2-digit",
     day: "2-digit",
   });
+
+  export const isHearable = (u: string) => {
+    const url = new URL(u)
+    const isGithubRepo = url.host.includes('github.com')
+    if (isGithubRepo) return false
+    return true
+  }

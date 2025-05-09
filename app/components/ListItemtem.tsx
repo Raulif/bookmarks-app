@@ -1,6 +1,6 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 import type { Bookmark } from "../types/bookmark";
-import { formatDate } from "../lib/helpers";
+import { formatDate, isHearable } from "../lib/helpers";
 
 type ListItemProps = {
   id: Bookmark["id"];
@@ -10,7 +10,7 @@ type ListItemProps = {
   title: Bookmark["title"];
   onCheckboxChange: (id: Bookmark["id"], isChecked: boolean) => void;
   onHearClick: (id: Bookmark["id"]) => void;
-  number: number
+  number: number;
 };
 
 export const ListItem = ({
@@ -25,6 +25,8 @@ export const ListItem = ({
 }: ListItemProps) => {
   const [isChecked, setIsChecked] = useState(consumed);
   const [isPlaying, setIsPlaying] = useState(false);
+
+  const hearable = useMemo(() => isHearable(url), [url]);
 
   const onChange = useCallback(() => {
     setIsChecked(!isChecked);
@@ -56,25 +58,24 @@ export const ListItem = ({
             {title}
           </a>
         </div>
-        <div className="actions">
-          {isPlaying ? (
-            <button className="stop" onClick={() => onStopClick()}>
-              Stop
-            </button>
-          ) : (
-            <button className="hear" onClick={onHear}>
-              Hear
-            </button>
-          )}
-          <a href={url} target="_blank" rel="noopener noreferrer">
-            Visit
-          </a>
-        </div>
+        {hearable && (
+          <div className="actions">
+            {isPlaying ? (
+              <button className="stop" onClick={() => onStopClick()}>
+                Stop
+              </button>
+            ) : (
+              <button className="hear" onClick={onHear}>
+                Hear
+              </button>
+            )}
+          </div>
+        )}
       </div>
       <div className="checkbox-container">
         <input
           type="checkbox"
-          title="Read it!"
+          title="Consumed"
           checked={isChecked}
           onChange={onChange}
         />
