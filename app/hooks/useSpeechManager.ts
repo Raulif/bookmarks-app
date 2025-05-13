@@ -58,6 +58,7 @@ export const useSpeechManager = () => {
         console.error("Error on hear click: ", error);
         setCurrentTrackId("");
         currentId.current = ''
+        await wakeLock.releaseWakeLock()
         setGettingText(false);
       }
     },
