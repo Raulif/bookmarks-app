@@ -51,6 +51,8 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
           rel="stylesheet"
         ></link>
         <link rel="stylesheet" href="/styles.css"></link>
+        <link rel="manifest" href="/manifest.json"></link>
+        <meta name="theme-color" content="blueviolet"></meta>
       </head>
       <body>
         {children}

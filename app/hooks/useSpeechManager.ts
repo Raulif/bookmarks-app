@@ -3,8 +3,10 @@ import { useSpeachStore } from "../store/useSpeechStore";
 import { getArticle } from "../lib/article-crud";
 import { SpeechManager } from "../lib/SpeechManager";
 import { useBookmarks } from "./useBookmarks";
+import { useWakeLock } from "./useWakeLock";
 
 export const useSpeechManager = () => {
+  const wakeLock = useWakeLock()
   const { sortedBookmarks } = useBookmarks();
   const currentId = useRef("");
   const {
@@ -36,6 +38,7 @@ export const useSpeechManager = () => {
 
   const onHearClick = useCallback(
     async (id: string) => {
+      await wakeLock.requestWakeLock()
       const speechManager = createSpeechManager();
 
       setCurrentTrackId(id);

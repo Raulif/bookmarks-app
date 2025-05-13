@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 
 import { ListItem } from "../components/ListItem";
 import { SortingSelect } from "../components/SortingSelect";
@@ -21,6 +21,24 @@ function Home() {
 
   const onSelectChange = useCallback((value: string) => {
     setSorting(value);
+  }, []);
+
+  useEffect(() => {
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker
+          .register("../lib/serviceWorker.ts")
+          .then((registration) => {
+            console.log(
+              "ServiceWorker registration successful with scope: ",
+              registration
+            );
+          })
+          .catch((err) => {
+            console.log('ServiceWorker registration failed: ', err);
+          });
+      });
+    }
   }, []);
 
   return (
