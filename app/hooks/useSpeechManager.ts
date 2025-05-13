@@ -4,9 +4,8 @@ import { getArticle } from "../lib/article-crud";
 import { SpeechManager } from "../lib/SpeechManager";
 import { useBookmarks } from "./useBookmarks";
 import { useWakeLock } from "./useWakeLock";
-
 export const useSpeechManager = () => {
-  const wakeLock = useWakeLock()
+  const wakeLock = useWakeLock();
   const { sortedBookmarks } = useBookmarks();
   const currentId = useRef("");
   const {
@@ -30,7 +29,7 @@ export const useSpeechManager = () => {
     const speechManager = new SpeechManager({
       onPlay: () => setSpeaking(true),
       onStop: () => setSpeaking(false),
-      onEnd: playNextItem
+      onEnd: playNextItem,
     });
     setSpeechManager(speechManager);
     return speechManager;
@@ -38,15 +37,17 @@ export const useSpeechManager = () => {
 
   const onHearClick = useCallback(
     async (id: string) => {
-      await wakeLock.requestWakeLock()
+      await wakeLock.requestWakeLock();
       const speechManager = createSpeechManager();
 
       setCurrentTrackId(id);
       currentId.current = id;
 
-      const url = sortedBookmarks.find((bookmark: any) => bookmark.id === id)?.url
-      
-      if (!url) throw Error('No url found to play');
+      const url = sortedBookmarks.find(
+        (bookmark: any) => bookmark.id === id
+      )?.url;
+
+      if (!url) throw Error("No url found to play");
 
       setGettingText(true);
 
@@ -57,18 +58,25 @@ export const useSpeechManager = () => {
       } catch (error) {
         console.error("Error on hear click: ", error);
         setCurrentTrackId("");
-        currentId.current = ''
-        await wakeLock.releaseWakeLock()
+        currentId.current = "";
+        await wakeLock.releaseWakeLock();
         setGettingText(false);
       }
     },
-    [sortedBookmarks, setCurrentTrackId, currentId.current]
+    [
+      sortedBookmarks,
+      setCurrentTrackId,
+      currentId.current,
+      // wakeLock
+    ]
   );
 
   const playNextItem = useCallback(() => {
     // Find next ID
-    const currentIndex = sortedBookmarks.findIndex(bm => bm.id === currentId.current)
-    const nextId = sortedBookmarks[currentIndex + 1].id
+    const currentIndex = sortedBookmarks.findIndex(
+      (bm) => bm.id === currentId.current
+    );
+    const nextId = sortedBookmarks[currentIndex + 1].id;
     onHearClick(nextId);
   }, [onHearClick, currentId.current]);
 
