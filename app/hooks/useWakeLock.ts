@@ -7,6 +7,7 @@ export const useWakeLock = () => {
     if ("wakeLock" in navigator) {
       try {
         const lock = await navigator.wakeLock.request("screen");
+        console.log('Wake Lock requested: ', lock)
         setWakeLock(lock);
         return true;
       } catch (e) {
