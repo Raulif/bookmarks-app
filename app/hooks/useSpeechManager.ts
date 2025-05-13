@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useRef } from "react";
 import { useSpeachStore } from "../store/useSpeechStore";
 import { getArticle } from "../lib/article-crud";
 import { SpeechManager } from "../lib/SpeechManager";
@@ -40,7 +40,8 @@ export const useSpeechManager = () => {
 
       setCurrentTrackId(id);
       currentId.current = id;
-      let url = sortedBookmarks.find((bookmark: any) => bookmark.id === id)?.url
+
+      const url = sortedBookmarks.find((bookmark: any) => bookmark.id === id)?.url
       
       if (!url) throw Error('No url found to play');
 

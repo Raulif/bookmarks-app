@@ -15,7 +15,7 @@ export const Route = createFileRoute("/")({
 function Home() {
   const { onCancelClick, onHearClick, onStopClick } = useSpeechManager();
   const { sortedBookmarks, sorting, setSorting, bookmarks } = useBookmarks();
-  const { speaking, setCurrentTrackId } = useSpeachStore();
+  const { speaking } = useSpeachStore();
 
   const onCheckboxChange = useCallback(updateBookmark, []);
 
@@ -51,7 +51,7 @@ function Home() {
             consumed={bookmark.consumed}
             url={bookmark.url}
             title={bookmark.title}
-            onHearClick={id => {setCurrentTrackId(id); onHearClick(id);}}
+            onHearClick={onHearClick}
             onStop={onStopClick}
             onCancel={onCancelClick}
           />
