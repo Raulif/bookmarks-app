@@ -23,24 +23,6 @@ function Home() {
     setSorting(value);
   }, []);
 
-  useEffect(() => {
-    if ("serviceWorker" in navigator) {
-      window.addEventListener("load", () => {
-        navigator.serviceWorker
-          .register("/serviceWorker.js")
-          .then((registration) => {
-            console.log(
-              "ServiceWorker registration successful with scope: ",
-              registration
-            );
-          })
-          .catch((err) => {
-            console.log('ServiceWorker registration failed: ', err);
-          });
-      });
-    }
-  }, []);
-
   return (
     <div className="outer-container">
       <div className="headline-container">
