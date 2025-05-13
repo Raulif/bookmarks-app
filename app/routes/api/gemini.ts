@@ -2,9 +2,10 @@ import { json } from "@tanstack/react-start";
 import { createAPIFileRoute } from "@tanstack/react-start/api";
 import { GoogleGenAI } from "@google/genai";
 import { setResponseStatus } from "@tanstack/react-start/server";
+import { LLMPrompt } from "../../lib/llm-prompt";
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 const GEMINI_MODEL = "gemini-2.0-flash";
+const gemini = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 export const APIRoute = createAPIFileRoute("/api/gemini")({
   GET: async ({ request, params }) => {
@@ -20,14 +21,7 @@ export const APIRoute = createAPIFileRoute("/api/gemini")({
       // Prepare the content for the AI model
       const contents = [
         {
-          text: `This is a HTML page with an article or a blog entry in it. 
-                Please extract the main text content from it and return it as plain text. 
-                Do not include any HTML tags or other elements. Just the main text content.
-                Please include the title of the article at the beginning, prefixed by the text 'Title:'.
-                If you find the page not to be an article or a blog entry, 
-                (for example it could be a landing page of a company or a technology, 
-                or it could also be a Github Repo), then please let me know, 
-                and please give me a brief explanation of why you came to that conclusion.`,
+          text: LLMPrompt,
         },
         {
           inlineData: {
@@ -37,7 +31,7 @@ export const APIRoute = createAPIFileRoute("/api/gemini")({
         },
       ];
       // Generate content using the AI model
-      const aiResponse = await ai.models.generateContent({
+      const aiResponse = await gemini.models.generateContent({
         model: GEMINI_MODEL,
         contents,
       });

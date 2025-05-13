@@ -1,10 +1,11 @@
-// Speech Synthesis Manager for Large Text - TypeScript Version
-
 // Types and interfaces
 interface SpeechManagerOptions {
   chunkSize?: number;
   lang?: string;
   pitch?: number;
+  onPlay?: () => void;
+  onStop?: () => void;
+  onEnd?: () => void;
 }
 
 interface ProgressInfo {
@@ -26,14 +27,18 @@ interface SpeechStatus {
 type ProgressCallback = (progress: ProgressInfo) => void;
 
 export class SpeechManager {
-  options: Required<SpeechManagerOptions>;
-  synth: SpeechSynthesis;
+  private options: Required<SpeechManagerOptions>;
+  private synth: SpeechSynthesis;
   private chunks: string[];
   private currentChunk: number;
   private isPaused: boolean;
   private isPlaying: boolean;
   private progressCallbacks: ProgressCallback[];
   private bugFixInterval: NodeJS.Timeout | null;
+  private onPlay: () => void;
+  private onStop: () => void;
+  private onEnd: () => void;
+
 
   constructor(options: SpeechManagerOptions = {}) {
     // Default options
@@ -41,6 +46,9 @@ export class SpeechManager {
       chunkSize: options.chunkSize ?? 1500,
       lang: options.lang ?? "en-US",
       pitch: 0.85,
+      onPlay: options?.onPlay ?? (() => {}),
+      onStop: options?.onStop ?? (() => {}),
+      onEnd: options?.onEnd ?? (() => {}),
     };
 
     this.synth = window.speechSynthesis;
@@ -50,6 +58,9 @@ export class SpeechManager {
     this.isPlaying = false;
     this.progressCallbacks = [];
     this.bugFixInterval = null;
+    this.onPlay = this.options.onPlay;
+    this.onStop = this.options.onStop;
+    this.onEnd = this.options.onEnd;
   }
 
   // Split text into manageable chunks
@@ -141,6 +152,8 @@ export class SpeechManager {
     } else if (this.currentChunk >= this.chunks.length - 1) {
       // We've finished all chunks
       this.isPlaying = false;
+      this.onStop();
+      this.onEnd();
       this._notifyProgress(true);
     }
   }
@@ -172,13 +185,13 @@ export class SpeechManager {
   public speak(text: string): boolean {
     // Stop any ongoing speech
     this.stop();
-
+    console.log({ textInSM: text });
     // Prepare the text
     const chunkCount = this._prepareChunks(text);
-
     if (chunkCount > 0) {
       this.isPaused = false;
       this.isPlaying = true;
+      this.onPlay();
       this.currentChunk = 0;
 
       // Start speaking the first chunk
@@ -217,6 +230,7 @@ export class SpeechManager {
     this.isPaused = false;
     this.isPlaying = false;
     this._clearBugFixInterval();
+    this.onStop();
     return true;
   }
 
@@ -240,7 +254,7 @@ export class SpeechManager {
   }
 
   // Get current playing status
-  public getStatus(): SpeechStatus {
+  get status(): SpeechStatus {
     return {
       isPlaying: this.isPlaying,
       isPaused: this.isPaused,
@@ -250,6 +264,12 @@ export class SpeechManager {
         ? Math.round(((this.currentChunk + 1) / this.chunks.length) * 100)
         : 0,
     };
+  }
+
+  set status(status: SpeechStatus) {
+    this.isPlaying = status.isPlaying;
+    this.isPaused = status.isPaused;
+    this.currentChunk = status.currentChunk;
   }
 
   private _setBugFixInterval(): void {

@@ -1,6 +1,7 @@
 import { useState, useCallback, useMemo } from "react";
 import type { Bookmark } from "../types/bookmark";
 import { formatDate, isHearable } from "../lib/helpers";
+import { useSpeachStore } from "../store/useSpeechStore";
 
 type ListItemProps = {
   id: Bookmark["id"];
@@ -11,6 +12,8 @@ type ListItemProps = {
   onCheckboxChange: (id: Bookmark["id"], isChecked: boolean) => void;
   onHearClick: (id: Bookmark["id"]) => void;
   number: number;
+  onStop: () => void;
+  onCancel: () => void;
 };
 
 export const ListItem = ({
@@ -22,10 +25,11 @@ export const ListItem = ({
   url,
   title,
   onHearClick,
+  onStop,
+  onCancel,
 }: ListItemProps) => {
   const [isChecked, setIsChecked] = useState(consumed);
-  const [isPlaying, setIsPlaying] = useState(false);
-
+  const { gettingText, speaking, currentTrackId } = useSpeachStore();
   const hearable = useMemo(() => isHearable(url), [url]);
 
   const onChange = useCallback(() => {
@@ -33,41 +37,64 @@ export const ListItem = ({
     onCheckboxChange(id, !isChecked);
   }, [onCheckboxChange, isChecked]);
 
-  const onStopClick = useCallback(() => {
-    setIsPlaying(false);
-    window.speechSynthesis.cancel();
-  }, []);
-
-  const onHear = useCallback(() => {
-    setIsPlaying(true);
-    onHearClick(id);
-  }, [id]);
+  const currentItem = useMemo(
+    () => currentTrackId === id,
+    [currentTrackId, id]
+  );
+  const playingItem = useMemo(
+    () => currentItem && speaking,
+    [currentItem, speaking]
+  );
+  const loadingItem = useMemo(
+    () => currentItem && gettingText,
+    [currentItem, gettingText]
+  );
 
   return (
-    <li key={id} className={`list-item ${isChecked ? "consumed" : ""}`}>
+    <li
+      key={id}
+      className={`list-item  ${playingItem ? "playing" : ""} ${isChecked ? "consumed" : ""}`}
+    >
       <div className="item-content">
         <p className="date-added lora-regular-italic">{formatDate(date)}</p>
         <div className="item-inner-content">
+          {playingItem && <span>PLAYING: </span>}
           <span className="item-number">{number}</span>
           <a
             href={url}
             target="_blank"
             rel="noopener noreferrer"
-            className="lora-regular"
+            className={`lora-regular title`}
           >
             {title}
           </a>
         </div>
         {hearable && (
           <div className="actions">
-            {isPlaying ? (
-              <button className="stop" onClick={() => onStopClick()}>
-                Stop
-              </button>
-            ) : (
-              <button className="hear" onClick={onHear}>
-                Hear
-              </button>
+            <button
+              className={`
+               lora-regular ${loadingItem ? "loading" : playingItem ? "stop" : "hear"}
+              `}
+              onClick={
+                loadingItem
+                  ? onCancel
+                  : playingItem
+                    ? onStop
+                    : () => onHearClick(id)
+              }
+            >
+              {!currentItem
+                ? "Hear"
+                : playingItem
+                  ? "Stop"
+                  : gettingText
+                    ? "Cancel"
+                    : "Hear"}
+            </button>
+            {loadingItem && (
+              <span className="spinner-container lora-bold">
+                <span className="spinner"></span> Loading ...
+              </span>
             )}
           </div>
         )}

@@ -32,10 +32,39 @@ body {
   flex-direction: column;
 }
 
+button {
+  cursor: pointer;
+}
+
 @media screen and (max-width: 768px) {
   .outer-container {
     padding: 16px;
   }
+}
+
+.headline-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.speak-cancel {
+  background-color: blueviolet;
+  padding: 8px 24px;
+  border: 2px solid white;
+  border-radius: 4px;
+  font-size: 18px;
+  color: white;
+  cursor: pointer;
+  box-shadow: 0px 0px 0px black;
+  transition: all 0.2s ease-in;
+}
+
+.speak-cancel:hover {
+  background-color: white;
+  color: blueviolet;
+  border-color: blueviolet;
+  box-shadow: 4px 4px 0 black;
 }
 
 .read {
@@ -146,6 +175,64 @@ body {
   text-underline-offset: 4px;
 }
 
+.list-item.playing .item-inner-content *,
+.list-item.playing .date-added {
+  font-weight: bold;
+  color: blueviolet;
+}
+
+.actions {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.actions button {
+  padding: 6px 12px;
+  border: 1px solid blueviolet;
+  transition: all 0.15s ease-in;
+  box-shadow: 0px 0px 0px black;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 68px;
+  justify-content: center;
+  font-size: 14px;
+  border-radius: 4px;
+}
+
+.actions button:hover {
+  box-shadow: 2px 2px 0px black;
+  font-weight: bold;
+}
+
+.actions .loading {
+  background-color: black;
+  color: white;
+}
+
+.actions .loading:hover {
+  box-shadow: 2px 2px 0px blueviolet;
+}
+
+.actions .hear {
+  background-color: white;
+  color: blueviolet;
+}
+
+.actions .hear:hover,
+.list-item .stop {
+  background-color: blueviolet;
+  color: white;
+}
+
+.actions .stop:hover {
+  color: white;
+  background-color: black;
+  box-shadow: 2px 2px 0px blueviolet;
+}
+
 /* CHECKBOX STYLES */
 
 :root {
@@ -231,9 +318,38 @@ input[type="checkbox"]:disabled {
 
 input[type="checkbox"]:hover {
   border-color: var(--form-control-color);
-  box-shadow: 1px 1px 0 var(--form-control-color);
+  box-shadow: 2px 2px 0 black;
 }
 
 #sort-items-select {
   margin-left: 16px;
+}
+
+/* SPINNER */
+
+.spinner-container {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: blueviolet;
+}
+
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid blueviolet;
+  border-bottom-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
