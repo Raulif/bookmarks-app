@@ -185,7 +185,6 @@ export class SpeechManager {
   public speak(text: string): boolean {
     // Stop any ongoing speech
     this.stop();
-    console.log({ textInSM: text });
     // Prepare the text
     const chunkCount = this._prepareChunks(text);
     if (chunkCount > 0) {
