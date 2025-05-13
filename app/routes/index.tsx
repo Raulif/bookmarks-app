@@ -27,7 +27,7 @@ function Home() {
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => {
         navigator.serviceWorker
-          .register("../lib/serviceWorker.ts")
+          .register("/serviceWorker.js")
           .then((registration) => {
             console.log(
               "ServiceWorker registration successful with scope: ",
