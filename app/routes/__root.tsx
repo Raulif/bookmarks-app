@@ -6,6 +6,7 @@ import {
   createRootRouteWithContext,
 } from "@tanstack/react-router";
 import { QueryClient } from "@tanstack/react-query";
+import "../styles/global.css";
 
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient;
@@ -50,7 +51,6 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
           href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap"
           rel="stylesheet"
         ></link>
-        <link rel="stylesheet" href="/styles.css"></link>
         <link rel="manifest" href="/manifest.json"></link>
         <meta name="theme-color" content="blueviolet"></meta>
       </head>
