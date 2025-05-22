@@ -6,7 +6,7 @@ import {
   createRootRouteWithContext,
 } from "@tanstack/react-router";
 import { QueryClient } from "@tanstack/react-query";
-import "../styles/global.css";
+import css from "../styles/global.css?url";
 
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient;
@@ -24,6 +24,11 @@ export const Route = createRootRouteWithContext<{
         title: "Bookmarks App",
       },
     ],
+    ...(process.env.NODE_ENV === "production"
+      ? {
+          links: [{ rel: "stylesheet", href: css }],
+        }
+      : {}),
   }),
   component: RootComponent,
 });
@@ -45,7 +50,7 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
         <link
           rel="preconnect"
           href="https://fonts.gstatic.com"
-          crossOrigin
+          crossOrigin="anonymous"
         ></link>
         <link
           href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap"

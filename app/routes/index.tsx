@@ -7,6 +7,7 @@ import { updateBookmark } from "../lib/bookmarks-crud";
 import { useSpeachStore } from "../store/useSpeechStore";
 import { useSpeechManager } from "../hooks/useSpeechManager";
 import { useBookmarks } from "../hooks/useBookmarks";
+import "../styles/global.css";
 
 export const Route = createFileRoute("/")({
   component: Home,
