@@ -85,7 +85,6 @@ export const APIRoute = createAPIFileRoute("/api/bookmarks")({
       const response = await getBookmarksFromDB();
 
       const { bookmarks, _id } = response;
-      console.log({_id, bookmarks})
 
       const updatedBookmarks = bookmarks.map((b) => {
         if (b.id === bookmark.id) {

@@ -28,7 +28,6 @@ function Home() {
     if (speaking) {
       onCancelClick();
     } else if (typeof Window !== "undefined") {
-      console.log('Cancel speech synthesiser')
       window.speechSynthesis.cancel();
     }
   }, [onCancelClick, speaking]);
