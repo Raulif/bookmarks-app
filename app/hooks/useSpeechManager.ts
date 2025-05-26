@@ -19,7 +19,8 @@ export const useSpeechManager = () => {
   } = useSpeachStore();
 
   const onCancelClick = useCallback(() => {
-    abortController?.abort();
+    console.log('on cancel click')
+    abortController?.abort('cancel fetching');
     setGettingText(false);
     speechManager?.stop();
     setAbortController(new AbortController());
@@ -67,6 +68,7 @@ export const useSpeechManager = () => {
       sortedBookmarks,
       setCurrentTrackId,
       currentId.current,
+      abortController
       // wakeLock
     ]
   );

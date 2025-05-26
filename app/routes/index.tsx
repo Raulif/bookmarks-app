@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useCallback, useEffect } from "react";
+import { useCallback } from "react";
 
 import { ListItem } from "../components/ListItem";
 import { SortingSelect } from "../components/SortingSelect";
@@ -24,17 +24,25 @@ function Home() {
     setSorting(value);
   }, []);
 
+  const onGeneralStopClick = useCallback(() => {
+    if (speaking) {
+      onCancelClick();
+    } else if (typeof Window !== "undefined") {
+      console.log('Cancel speech synthesiser')
+      window.speechSynthesis.cancel();
+    }
+  }, [onCancelClick, speaking]);
+
   return (
     <div className="outer-container">
       <div className="headline-container">
         <h1 className={"headline lora-bold"}>
           {bookmarks?.length ? "Bookmarked Articles" : "No bookmarked articles"}
         </h1>
-        {speaking && (
-          <button onClick={onCancelClick} className="speak-cancel lora-bold">
-            Stop
-          </button>
-        )}
+
+        <button onClick={onGeneralStopClick} className="speak-cancel lora-bold">
+          Stop
+        </button>
       </div>
       <p className="counter lora-regular-italic">[{bookmarks.length} links]</p>
       <div>

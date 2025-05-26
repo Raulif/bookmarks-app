@@ -1,18 +1,17 @@
 export const getArticle = async (url: string, signal: AbortSignal) => {
   try {
     const urlParams = new URLSearchParams({ url });
-    const response = await fetch(`/api/gemini?${urlParams.toString()}`, {
+    const response = await fetch(`/api/article?${urlParams.toString()}`, {
       signal,
     });
     const text = await response.json();
-    console.log({text})
     if (typeof text === "string") {
       return text;
     } else {
       throw new Error("Invalid response format", text);
     }
   } catch (error) {
-    console.error("Error fetching or speaking text:", error);
+    console.error("Error in getArticle [client]:", error);
     return "";
   }
 };
