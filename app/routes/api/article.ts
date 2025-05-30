@@ -31,9 +31,10 @@ export const APIRoute = createAPIFileRoute('/api/article')({
       // Get content as readable text
       const text = convert(content, convertOptions);
       const parsedText = text.replace(/\n/g, ' ')
+      console.log(parsedText)
       const textWithTitle = `Title: ${title}. Article: ${parsedText}.`;
       setResponseStatus(200);
-      return json(textWithTitle);
+      return json({text:textWithTitle});
     } catch (error) {
       console.error(error);
       setResponseStatus(500);
