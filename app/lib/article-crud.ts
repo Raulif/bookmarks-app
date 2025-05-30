@@ -4,7 +4,7 @@ export const getArticle = async (url: string, signal: AbortSignal) => {
     const response = await fetch(`/api/article?${urlParams.toString()}`, {
       signal,
     });
-    const text = await response.json();
+    const {text} = await response.json();
     if (typeof text === "string") {
       return text;
     } else {
