@@ -7,6 +7,7 @@ import {
 } from "../../db/bookmarks";
 import { setHeaders, setResponseStatus } from "@tanstack/react-start/server";
 import type { Bookmark } from "../../types/bookmark";
+import { isHearable } from '../../lib/helpers';
 
 export const APIRoute = createAPIFileRoute("/api/bookmarks")({
   POST: async ({ request, params }) => {
@@ -25,21 +26,24 @@ export const APIRoute = createAPIFileRoute("/api/bookmarks")({
               ...bookmark,
               createdAt: existing.createdAt,
               consumed: existing.consumed,
+              hearable: bookmark.hearable || isHearable(bookmark.url)
             };
           } else {
             return {
               ...bookmark,
               createdAt: new Date().getTime(),
               consumed: false,
+              hearable: isHearable(bookmark.url)
             };
           }
         });
         await updateBookmarkInDB(_id, Array.from(bookmarks));
       } else {
-        const bookmarks = newBookmarks.map((b) => ({
-          ...b,
+        const bookmarks = newBookmarks.map((bookmark) => ({
+          ...bookmark,
           createdAt: new Date().getTime(),
           consumed: false,
+          hearable: isHearable(bookmark.url)
         }));
         await postBookmarksToDB(bookmarks);
       }

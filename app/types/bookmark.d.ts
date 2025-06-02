@@ -5,4 +5,5 @@ export type Bookmark = {
   dateAdded: number
   title: string
   url: string
+  hearable: boolean
 }

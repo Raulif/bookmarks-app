@@ -1,20 +1,16 @@
-import { useState, useCallback, useMemo } from "react";
-import type { Bookmark } from "../types/bookmark";
-import { formatDate, isHearable } from "../lib/helpers";
-import { useSpeachStore } from "../store/useSpeechStore";
+import { useState, useCallback, useMemo } from 'react';
+import type { Bookmark } from '../types/bookmark';
+import { formatDate, isHearable } from '../lib/helpers';
+import { useSpeachStore } from '../store/useSpeechStore';
 
 type ListItemProps = {
-  id: Bookmark["id"];
   date: number;
-  consumed: Bookmark["consumed"];
-  url: Bookmark["url"];
-  title: Bookmark["title"];
-  onCheckboxChange: (id: Bookmark["id"], isChecked: boolean) => void;
-  onHearClick: (id: Bookmark["id"]) => void;
+  onCheckboxChange: (id: Bookmark['id'], isChecked: boolean) => void;
+  onHearClick: (id: Bookmark['id']) => void;
   number: number;
   onStop: () => void;
   onCancel: () => void;
-};
+} & Partial<Bookmark>;
 
 export const ListItem = ({
   id,
@@ -27,12 +23,13 @@ export const ListItem = ({
   onHearClick,
   onStop,
   onCancel,
+  hearable
 }: ListItemProps) => {
   const [isChecked, setIsChecked] = useState(consumed);
   const { gettingText, speaking, currentTrackId } = useSpeachStore();
-  const hearable = useMemo(() => isHearable(url), [url]);
 
   const onChange = useCallback(() => {
+    if (!id) return;
     setIsChecked(!isChecked);
     onCheckboxChange(id, !isChecked);
   }, [onCheckboxChange, isChecked]);
@@ -50,30 +47,32 @@ export const ListItem = ({
     [currentItem, gettingText]
   );
 
+  if (!id) return;
+
   return (
     <li
       key={id}
-      className={`list-item  ${playingItem ? "playing" : ""} ${isChecked ? "consumed" : ""}`}
+      className={`list-item  ${playingItem ? 'playing' : ''} ${isChecked ? 'consumed' : ''}`}
     >
-      <div className="item-content">
-        <p className="date-added lora-regular-italic">{formatDate(date)}</p>
-        <div className="item-inner-content">
+      <div className='item-content'>
+        <p className='date-added lora-regular-italic'>{formatDate(date)}</p>
+        <div className='item-inner-content'>
           {playingItem && <span>PLAYING: </span>}
-          <span className="item-number">{number}</span>
+          <span className='item-number'>{number}</span>
           <a
             href={url}
-            target="_blank"
-            rel="noopener noreferrer"
+            target='_blank'
+            rel='noopener noreferrer'
             className={`lora-regular title`}
           >
             {title}
           </a>
         </div>
         {hearable && (
-          <div className="actions">
+          <div className='actions'>
             <button
               className={`
-               lora-regular ${loadingItem ? "loading" : playingItem ? "stop" : "hear"}
+               lora-regular ${loadingItem ? 'loading' : playingItem ? 'stop' : 'hear'}
               `}
               onClick={
                 loadingItem
@@ -84,25 +83,25 @@ export const ListItem = ({
               }
             >
               {!currentItem
-                ? "Hear"
+                ? 'Hear'
                 : playingItem
-                  ? "Stop"
+                  ? 'Stop'
                   : gettingText
-                    ? "Cancel"
-                    : "Hear"}
+                    ? 'Cancel'
+                    : 'Hear'}
             </button>
             {loadingItem && (
-              <span className="spinner-container lora-bold">
-                <span className="spinner"></span> Loading ...
+              <span className='spinner-container lora-bold'>
+                <span className='spinner'></span> Loading ...
               </span>
             )}
           </div>
         )}
       </div>
-      <div className="checkbox-container">
+      <div className='checkbox-container'>
         <input
-          type="checkbox"
-          title="Consumed"
+          type='checkbox'
+          title='Consumed'
           checked={isChecked}
           onChange={onChange}
         />
