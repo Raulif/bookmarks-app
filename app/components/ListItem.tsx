@@ -4,7 +4,7 @@ import { formatDate, isHearable } from '../lib/helpers';
 import { useSpeachStore } from '../store/useSpeechStore';
 
 type ListItemProps = {
-  date: number;
+  dateAdded: number;
   onCheckboxChange: (id: Bookmark['id'], isChecked: boolean) => void;
   onHearClick: (id: Bookmark['id']) => void;
   number: number;
@@ -16,7 +16,7 @@ export const ListItem = ({
   id,
   onCheckboxChange,
   number,
-  date,
+  dateAdded,
   consumed,
   url,
   title,
@@ -47,7 +47,7 @@ export const ListItem = ({
     [currentItem, gettingText]
   );
 
-  if (!id) return;
+  if (!id) return null;
 
   return (
     <li
@@ -55,7 +55,7 @@ export const ListItem = ({
       className={`list-item  ${playingItem ? 'playing' : ''} ${isChecked ? 'consumed' : ''}`}
     >
       <div className='item-content'>
-        <p className='date-added lora-regular-italic'>{formatDate(date)}</p>
+        <p className='date-added lora-regular-italic'>{formatDate(dateAdded)}</p>
         <div className='item-inner-content'>
           {playingItem && <span>PLAYING: </span>}
           <span className='item-number'>{number}</span>

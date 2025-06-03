@@ -51,17 +51,13 @@ function Home() {
       <ul className="list">
         {sortedBookmarks?.map((bookmark, index) => (
           <ListItem
-            key={bookmark.id}
-            id={bookmark.id}
-            onCheckboxChange={onCheckboxChange}
-            number={index + 1}
-            date={bookmark.dateAdded}
-            consumed={bookmark.consumed}
-            url={bookmark.url}
-            title={bookmark.title}
-            onHearClick={onHearClick}
-            onStop={onStopClick}
-            onCancel={onCancelClick}
+          {...bookmark}
+          onCheckboxChange={onCheckboxChange}
+          number={index + 1}
+          onHearClick={onHearClick}
+          onStop={onStopClick}
+          onCancel={onCancelClick}
+          key={bookmark.id}
           />
         ))}
       </ul>
